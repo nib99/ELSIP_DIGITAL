@@ -1,0 +1,84 @@
+# render.yaml — Official ELSIP Full-Stack Deployment Blueprint
+# Supports automatic dev/main branching → separate dev & prod environments
+
+render:
+  version: 1
+
+services:
+  # ═════════════════════════════════════════════════════════════
+  # DEVELOPMENT ENVIRONMENT (branch: dev)
+  # ═════════════════════════════════════════════════════════════
+  - name: elsip-web-dev
+    type: web
+    env: node
+    region: oregon
+    plan: starter
+    branch: dev
+    repo: https://github.com/YOUR_GITHUB_USERNAME/elsip-prototype.git
+    rootDir: .
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+    autoDeploy: true
+
+    envVars:
+      NODE_ENV:
+        value: development
+      DATABASE_URL:
+        value: postgresql://devuser:devpass@elsip-db-dev.internal:5432/elsip_dev?sslmode=require
+      JWT_SECRET:
+        fromSecret: ELSIP_JWT_SECRET_DEV
+
+    healthCheckPath: /api/health  # Optional: add a simple health route later
+
+  - name: elsip-db-dev
+    type: postgresql
+    region: oregon
+    plan: starter
+    ipAllowList: []
+    databaseName: elsip_dev
+    databaseUser: devuser
+
+    # Auto-generated strong password stored as secret
+    envVars:
+      POSTGRES_PASSWORD:
+        fromSecret: ELSIP_DB_PASSWORD_DEV
+
+  # ═════════════════════════════════════════════════════════════
+  # PRODUCTION ENVIRONMENT (branch: main)
+  # ═════════════════════════════════════════════════════════════
+  - name: elsip-web-prod
+    type: web
+    env: node
+    region: oregon
+    plan: standard
+    branch: main
+    repo: https://github.com/YOUR_GITHUB_USERNAME/elsip-prototype.git
+    rootDir: .
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npm start
+    autoDeploy: true
+
+    envVars:
+      NODE_ENV:
+        value: production
+      DATABASE_URL:
+        value: postgresql://produser:prodpass@elsip-db-prod.internal:5432/elsip_prod?sslmode=require
+      JWT_SECRET:
+        fromSecret: ELSIP_JWT_SECRET_PROD
+
+    # Optional: Custom domain (add later via Render dashboard)
+    # domains:
+    #   - elsip.gov.et
+    #   - www.elsip.gov.et
+
+  - name: elsip-db-prod
+    type: postgresql
+    region: oregon
+    plan: standard
+    ipAllowList: []
+    databaseName: elsip_prod
+    databaseUser: produser
+
+    envVars:
+      POSTGRES_PASSWORD:
+        fromSecret: ELSIP_DB_PASSWORD_PROD
