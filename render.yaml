@@ -10,8 +10,8 @@ services:
     branch: dev
     repo: https://github.com/nib99/ELSIP_DIGITAL.git
     rootDir: .
-    buildCommand: npm ci && npx prisma generate && npm run build
-    startCommand: npm start
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx next start -p 10000
     autoDeploy: true
     envVars:
       NODE_ENV:
@@ -31,8 +31,8 @@ services:
     branch: main
     repo: https://github.com/nib99/ELSIP_DIGITAL.git
     rootDir: .
-    buildCommand: npm ci && npx prisma generate && npm run build
-    startCommand: npm start
+    buildCommand: npm install && npx prisma generate && npm run build
+    startCommand: npx next start -p 10000
     autoDeploy: true
     envVars:
       NODE_ENV:
