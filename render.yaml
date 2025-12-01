@@ -1,4 +1,4 @@
-render:
+
   version: 1
 
 services:
@@ -14,7 +14,7 @@ services:
     startCommand: npx next start -p 10000
     autoDeploy: true
     envVars:
-      NODE_ENV:
+      
         value: development
       DATABASE_URL:
         fromDatabase:
@@ -35,7 +35,7 @@ services:
     startCommand: npx next start -p 10000
     autoDeploy: true
     envVars:
-      NODE_ENV:
+      
         value: production
       DATABASE_URL:
         fromDatabase:
