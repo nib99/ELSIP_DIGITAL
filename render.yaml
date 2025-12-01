@@ -1,25 +1,18 @@
-# render.yaml — ELSIP Prototype (Dev + Prod) – FINAL WORKING VERSION
-# Tested & deployed successfully on dozens of Next.js + Prisma projects
-
 render:
   version: 1
 
 services:
-  # ——————————————————————————————————————————————————
-  # DEVELOPMENT – automatically deploys from branch: dev
-  # ——————————————————————————————————————————————————
   - type: web
     name: elsip-web-dev
     env: node
     region: oregon
     plan: starter
     branch: dev
-    repo: https://github.com/nib99/ELSIP_DIGITAL.git   # ← CHANGE THIS
+    repo: https://github.com/nib99/ELSIP_DIGITAL.git
     rootDir: .
     buildCommand: npm ci && npx prisma generate && npm run build
     startCommand: npm start
     autoDeploy: true
-
     envVars:
       NODE_ENV:
         value: development
@@ -28,23 +21,19 @@ services:
           name: elsip-db-dev
           property: connectionString
       JWT_SECRET:
-        sync: false   # You will type/paste this secret in Render UI (dev version)
+        sync: false
 
-  # ——————————————————————————————————————————————————
-  # PRODUCTION – automatically deploys from branch: main
-  # ——————————————————————————————————————————————————
   - type: web
     name: elsip-web-prod
     env: node
     region: oregon
     plan: standard
     branch: main
-    repo: https://github.com/YOUR_GITHUB_USERNAME/elsip-prototype.git   # ← CHANGE THIS
+    repo: https://github.com/nib99/ELSIP_DIGITAL.git
     rootDir: .
     buildCommand: npm ci && npx prisma generate && npm run build
     startCommand: npm start
     autoDeploy: true
-
     envVars:
       NODE_ENV:
         value: production
@@ -53,15 +42,13 @@ services:
           name: elsip-db-prod
           property: connectionString
       JWT_SECRET:
-        sync: false   # You will type/paste this secret in Render UI (prod version)
+        sync: false
 
 databases:
-  # Development PostgreSQL
   - name: elsip-db-dev
     region: oregon
     plan: starter
 
-  # Production PostgreSQL
   - name: elsip-db-prod
     region: oregon
     plan: standard
